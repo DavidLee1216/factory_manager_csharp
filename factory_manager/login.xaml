@@ -1,0 +1,18 @@
+﻿<Window x:Class="factory_manager.login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:factory_manager"
+        mc:Ignorable="d"
+        Title="用户登录" Height="273" Width="420" FontSize="16" Background="Aquamarine" Closing="Window_Closing">
+    <Grid>
+        <Label x:Name="label_username" Content="用户名" HorizontalAlignment="Left" Margin="52,51,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="username" HorizontalAlignment="Left" Height="28" Margin="153,51,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209"/>
+        <Label x:Name="label_passrd" Content="密码" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="52,97,0,0" VerticalAlignment="Top" Width="58"/>
+        <PasswordBox x:Name="passwd" HorizontalAlignment="Left" Margin="153,101,0,0" VerticalAlignment="Top" Width="209" Height="28"/>
+        <Button x:Name="Login" Click="Login_Click" Content="用户登录" HorizontalAlignment="Left" Margin="56,175,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="Cancel" Click="Cancel_Click" Content="非用户订阅" HorizontalAlignment="Left" Margin="246,175,0,0" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</Window>

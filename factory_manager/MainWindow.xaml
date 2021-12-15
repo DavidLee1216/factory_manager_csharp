@@ -1,0 +1,359 @@
+﻿<Window x:Class="factory_manager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:factory_manager"
+        mc:Ignorable="d"
+        Title="工厂管理器" Height="900" Width="1500" ResizeMode="CanMinimize">
+    <Grid>
+        <TabControl x:Name="tab_control" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Name="tab1" Header="资产入库摆放" FontSize="16" Width="150">
+                <Grid Background="Beige">
+                    <GroupBox Margin="10" HorizontalAlignment ="Left" Width="300" Padding="10" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_input_data" FontWeight="Bold">输入资料</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel Margin="0,0,0,0">
+                            <TextBlock x:Name="label_chinese_name">品名</TextBlock>
+                            <TextBox x:Name="asset_chinese_name"/>
+                            <TextBlock x:Name="label_korean_name" Margin="0 10 0 0">品名(朝鲜语)</TextBlock>
+                            <TextBox x:Name="asset_korean_name"/>
+                            <TextBlock x:Name="label_model" Margin="0 10 0 0">规格/型号</TextBlock>
+                            <TextBox x:Name="model"></TextBox>
+                            <TextBlock x:Name="label_owner" Margin="0 10 0 0">归属厂</TextBlock>
+                            <TextBox x:Name="owner"></TextBox>
+                            <TextBlock x:Name="label_in_date" Margin="0 10 0 0">入库日期</TextBlock>
+                            <DatePicker x:Name="purchase_date" SelectedDateFormat="Short"></DatePicker>
+                            <TextBlock x:Name="label_count" Margin="0 10 0 0" HorizontalAlignment="Left">数量</TextBlock>
+                            <TextBox x:Name="count"/>
+                            <TextBlock x:Name="label_price" Margin="0 10 0 0" HorizontalAlignment="Left">单价</TextBlock>
+                            <TextBox x:Name="price"></TextBox>
+                            <TextBlock x:Name="pay_block" Margin="0 10 0 0" HorizontalAlignment="Left">付款情况
+                            </TextBlock>
+                            <RadioButton x:Name="pay_yes" GroupName="Pay_State_Group" Margin="30 10 0 0" Content="是" Click="pay_yes_Click"/>
+                            <RadioButton x:Name="pay_no" GroupName="Pay_State_Group" Margin="30 10 0 0" Content="不" Click="pay_no_Click"/>
+                            <Button Margin="30 20 30 0" Height="30" Click="add_asset">
+                                <TextBlock x:Name="label_add">添加</TextBlock>
+                            </Button>
+                            <Button Margin="30 20 30 0" Height="30" Click="place_asset">
+                                <TextBlock x:Name="label_place">摆放</TextBlock>
+                            </Button>
+                            <Button Margin="30 20 30 0" Height="30" Click="modify_asset">
+                                <TextBlock x:Name="label_asset_modify">变更</TextBlock>
+                            </Button>
+                            <Button Margin="30 20 30 0" Height="30" Click="delete_asset">
+                                <TextBlock x:Name="label_asset_delete">删除</TextBlock>
+                            </Button>
+                            <Button Margin="30 20 30 0" Height="30" Click="add_excel_Click">
+                                <TextBlock x:Name="label_add_excel_data"><Run Text="Excel资料添加"/></TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+                    <DataGrid x:Name="dataGrid1" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" Grid.Row="1" SelectionUnit="FullRow" CanUserAddRows="False" HorizontalAlignment="Left" Height="795" Margin="326,22,0,0" 
+                              VerticalAlignment="Top" Width="1141" AlternatingRowBackground="#FFEEF3F7" AlternationCount="2" Background="Beige" ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Loaded="DataGrid_Loaded"
+                              SelectionChanged="dataGrid1_SelectionChanged" MouseDoubleClick="dataGrid1_MouseDoubleClick">
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#0070F0"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#FFFF00"/>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="grid1_label_no" Header="No" Width="100" Binding="{Binding id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid1_label_chinese_name" Header="品名" Width="150" Binding="{Binding chinese_name}"/>
+                            <DataGridTextColumn x:Name="grid1_label_korean_name" Header="品名(朝鲜语)" Width="150" Binding="{Binding korean_name}"/>
+                            <DataGridTextColumn x:Name="grid1_label_in_date" Header="入库日期" Width="150" Binding="{Binding in_date}"/>
+                            <DataGridTextColumn x:Name="grid1_label_count" Header="数量" Width="100" Binding="{Binding count}"/>
+                            <DataGridTextColumn x:Name="grid1_label_model" Header="规格/型号" Width="150" Binding="{Binding model}"/>
+                            <DataGridTextColumn x:Name="grid1_label_price" Header="单价" Width="100" Binding="{Binding price}"/>
+                            <DataGridTextColumn x:Name="grid1_label_owner" Header="归属厂" Width="100" Binding="{Binding owner}"/>
+                            <DataGridTextColumn x:Name="grid1_label_pay_state" Header="付款情况" Width="100" Binding="{Binding pay_state}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Name="tab2" Header="摆放资产管理" FontSize="16" Width="150">
+                <Grid Background="Beige">
+                    <DataGrid x:Name="dataGrid2" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" SelectionUnit="FullRow" CanUserAddRows="False" HorizontalAlignment="Left" Height="571" Margin="10,45,0,0" 
+                              VerticalAlignment="Top" Width="1141" AlternatingRowBackground="#FFEEF3F7" AlternationCount="2" Background="Beige" ScrollViewer.CanContentScroll="True" 
+                              ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Loaded="dataGrid2_Loaded"
+                              SelectionChanged="dataGrid2_SelectionChanged" MouseDoubleClick="dataGrid2_MouseDoubleClick">
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#0070F0"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#FFFF00"/>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="grid2_label_no" Header="No" Width="100" Binding="{Binding asset_id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid2_label_place_no" Header="place_No" Width="100" Visibility="Hidden" Binding="{Binding id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid2_label_chinese_name" Header="品名" Width="150" Binding="{Binding chinese_name}"/>
+                            <DataGridTextColumn x:Name="grid2_label_korean_name" Header="品名(朝鲜语)" Width="150" Binding="{Binding korean_name}"/>
+                            <DataGridTextColumn x:Name="grid2_label_place" Header="摆放工程" Width="100" Binding="{Binding place}"/>
+                            <DataGridTextColumn x:Name="grid2_label_in_date" Header="入库日期" Width="150" Binding="{Binding in_date}"/>
+                            <DataGridTextColumn x:Name="grid2_label_place_date" Header="摆放日期" Width="150" Binding="{Binding date}"/>
+                            <DataGridTextColumn x:Name="grid2_label_model" Header="规格/型号" Width="150" Binding="{Binding model}"/>
+                            <DataGridTextColumn x:Name="grid2_label_count" Header="数量" Width="100" Binding="{Binding count}"/>
+                            <DataGridTextColumn x:Name="grid2_label_price" Header="单价" Width="100" Binding="{Binding price}"/>
+                            <DataGridTextColumn x:Name="grid2_label_remark" Header="备注" Width="100" Binding="{Binding remark}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid x:Name="dataGrid_back" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" SelectionUnit="FullRow" CanUserAddRows="False" HorizontalAlignment="Left" Height="155"
+                              VerticalAlignment="Top" Width="560" Background="Beige" ScrollViewer.CanContentScroll="True" 
+                              ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Loaded="dataGrid_back_Loaded"
+                              SelectionChanged="dataGrid_back_SelectionChanged" Margin="10,660,0,0">
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#0070F0"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Beige"/>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="grid_back_label_no" Header="No" Width="100" Binding="{Binding id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_back_label_place_no" Header="place_No" Width="100" Visibility="Hidden" Binding="{Binding place_id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_back_label_back_no" Header="back_No" Width="100" Visibility="Hidden" Binding="{Binding back_id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_back_label_place" Header="返送工程" Width="150" Binding="{Binding place}"/>
+                            <DataGridTextColumn x:Name="grid_back_label_date" Header="返送日期" Width="150" Binding="{Binding date}"/>
+                            <DataGridTextColumn x:Name="grid_back_label_count" Header="数量" Width="100" Binding="{Binding count}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid x:Name="dataGrid_exhaust" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" SelectionUnit="FullRow" CanUserAddRows="False" HorizontalAlignment="Left" Height="155"
+                              VerticalAlignment="Top" Width="560" Background="Beige" ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Loaded="dataGrid_exhaust_Loaded"
+                              SelectionChanged="dataGrid_exhaust_SelectionChanged" Margin="590,660,0,0">
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#0070F0"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Beige"/>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="grid_exhaust_label_no" Header="No" Width="100" Binding="{Binding id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_exhaust_label_place_no" Header="place_No" Width="100" Visibility="Hidden" Binding="{Binding place_id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_exhaust_label_exhaust_no" Header="exhaust_No" Width="100" Visibility="Hidden" Binding="{Binding back_id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_exhaust_label_place" Header="处置工程" Width="150" Binding="{Binding place}"/>
+                            <DataGridTextColumn x:Name="grid_exhaust_label_date" Header="处置日期" Width="150" Binding="{Binding date}"/>
+                            <DataGridTextColumn x:Name="grid_exhaust_label_count" Header="数量" Width="100" Binding="{Binding count}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <GroupBox HorizontalAlignment="Left" Height="124" Margin="1172,12,0,0" VerticalAlignment="Top" Width="293" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_simple_search" FontWeight="Bold">简单查询</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="50">
+                                <TextBlock Text="No" Margin="20 10 0 0"/>
+                                <TextBox x:Name="simple_search_id" Width="192" Margin="20,0,0,0" Height="29"/>
+                            </StackPanel>
+                            <Button x:Name="label_button_search" Height="38" Width="100" Click="simple_search_Click">查看</Button>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox HorizontalAlignment="Left" Height="366" Margin="1172,136,0,0" VerticalAlignment="Top" Width="293" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_place_modify_move_delete" FontWeight="Bold">摆放工程变更/移动/删除</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel Height="343" VerticalAlignment="Top" Margin="0,0,0,-5">
+                            <TextBlock x:Name="label_modify_move_place_name" Text="变更/移动工程名" Margin="20 10 0 0"/>
+                            <TextBox x:Name="place2" Margin="20 0 20 0" Height="29"></TextBox>
+                            <TextBlock x:Name="label_modify_move_date" Text="变更/移动日期" Margin="20 10 0 0"/>
+                            <DatePicker Name="date2" Margin="20 0 20 0"></DatePicker>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_modify_move_count" Text="变更/移动数量" Margin="20 10 0 0"/>
+                                <TextBox x:Name="count2" Margin="20 10 20 0" Height="29" Width="120"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_combo_remark" Text="备注" Margin="20 10 0 0"/>
+                                <ComboBox x:Name="remarkCombo2" Margin="90 10 20 0" Height="29" Width="120" SelectedIndex="1">
+                                    <ComboBoxItem Content="1楼"/>
+                                    <ComboBoxItem Content="2楼"/>
+                                    <ComboBoxItem Content="3楼"/>
+                                    <ComboBoxItem Content="4楼"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <Button x:Name="label_button_modify" Height="30" Margin="40 15 40 0" Content="变更" Click="modify_place"/>
+                            <Button x:Name="label_button_delete" Height="30" Margin="40 15 40 0" Content="删除" Click="delete_place"/>
+                            <Button x:Name="label_button_move" Height="30" Margin="40 15 40 0" Content="移动" Click="move_place"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox HorizontalAlignment="Left" Height="157" Margin="1172,502,0,0" VerticalAlignment="Top" Width="293" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_group_back" FontWeight="Bold">返送</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10 10 0 0">
+                                <TextBlock x:Name="label_group_back_count">数量</TextBlock>
+                                <TextBox x:Name="back_count" Margin="52 0 0 0" Width="170" Height="28"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10 15 10 0">
+                                <TextBlock x:Name="label_group_back_date">返送日期</TextBlock>
+                                <DatePicker Name="back_date" Margin="20 0 0 0" Width="170"></DatePicker>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="label_group_back_button_back" Height="28" Width="100" Margin="20 10 20 10" Click="back_asset">返送</Button>
+                                <Button x:Name="label_group_back_button_cancel" Height="28" Width="100" Margin="20 10 20 10" Click="back_cancel">取消</Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox HorizontalAlignment="Left" Height="157" Margin="1172,660,0,0" VerticalAlignment="Top" Width="293" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_group_exhaust" FontWeight="Bold">处置</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10 10 0 0">
+                                <TextBlock x:Name="label_group_exhaust_count">数量</TextBlock>
+                                <TextBox x:Name="exhaust_count" Margin="52 0 0 0" Width="170" Height="28"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10 15 10 0">
+                                <TextBlock x:Name="label_group_exhaust_date">处置日期</TextBlock>
+                                <DatePicker Name="exhaust_date" Margin="20 0 0 0" Width="170"></DatePicker>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="label_group_exhaust_button_exhaust" Height="28" Width="100" Margin="20 10 20 10" Click="exhaust_asset">处置</Button>
+                                <Button x:Name="label_group_exhaust_button_cancel" Height="28" Width="100" Margin="20 10 20 10" Click="exhaust_cancel">取消</Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <Label x:Name="label_label_back_data" Content="返送资料" HorizontalAlignment="Left" Margin="10,629,0,0" VerticalAlignment="Top" Width="74"/>
+                    <Label x:Name="label_label_exhaust_data" Content="处置资料" HorizontalAlignment="Left" Margin="590,628,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label_label_place_data" Content="摆放资料" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Name="tab3" Header="资产材料查看" FontSize="16" Width="150">
+                <Grid Background="Beige">
+                    <GroupBox x:Name="label_group_search_items" Header="搜索项目" HorizontalAlignment="Left" Height="115" Margin="10,10,0,0" VerticalAlignment="Top" Width="1454" BorderBrush="#FF3C4347">
+                        <Grid Margin="0,0,10,0">
+                            <Label x:Name="label_search_area" Content="搜索范围" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="search_area_combo" HorizontalAlignment="Left" Margin="110,14,0,0" VerticalAlignment="Top" Width="118" SelectionChanged="search_area_combo_SelectionChanged">
+                                <ComboBoxItem Name="item1" Content="入库资料"/>
+                                <ComboBoxItem Name="item2" Content="摆放资料"/>
+                                <ComboBoxItem Name="item3" Content="移动资料"/>
+                                <ComboBoxItem Name="item4" Content="返送资料"/>
+                                <ComboBoxItem Name="item5" Content="处置资料"/>
+                                <ComboBoxItem Name="item6" Content="删除记录资料"/>
+                            </ComboBox>
+                            <Label x:Name="search_label_chinese_name" Content="品名" HorizontalAlignment="Left" Margin="274,10,0,0" VerticalAlignment="Top"/>
+                            <Label x:Name="search_label_korean_name" Content="品名(朝鲜语)" HorizontalAlignment="Left" Margin="274,46,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="search_text_chinese_name" HorizontalAlignment="Left" Height="23" Margin="379,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180"/>
+                            <TextBox x:Name="search_text_korean_name" HorizontalAlignment="Left" Height="23" Margin="379,50,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180"/>
+                            <DatePicker Name="search_date_from" HorizontalAlignment="Left" Margin="680,14,0,0" VerticalAlignment="Top" Width="115"/>
+                            <Label x:Name="search_label_date" Content="日期" HorizontalAlignment="Left" Margin="593,14,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label Content="-" HorizontalAlignment="Left" Margin="817,10,0,0" VerticalAlignment="Top" Width="21"/>
+                            <DatePicker Name="search_date_to" HorizontalAlignment="Left" Margin="860,14,0,0" VerticalAlignment="Top" Width="115"/>
+                            <Label x:Name="search_label_place" Content="工程" HorizontalAlignment="Left" Margin="593,45,0,0" VerticalAlignment="Top" Width="83"/>
+                            <TextBox x:Name="search_text_place" HorizontalAlignment="Left" Height="23" Margin="681,50,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="124"/>
+                            <Label x:Name="search_label_model" Content="规格/型号" HorizontalAlignment="Left" Margin="1056,10,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="search_text_model" HorizontalAlignment="Left" Height="23" Margin="1153,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="124"/>
+                            <Button x:Name="btn_search" Content="查看" HorizontalAlignment="Left" Margin="1187,52,0,0" VerticalAlignment="Top" Width="75" Click="btn_search_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <DataGrid x:Name="dataGrid_search" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" SelectionUnit="FullRow" CanUserAddRows="False" HorizontalAlignment="Left" Height="654"
+                              VerticalAlignment="Top" Width="1454" AlternatingRowBackground="#FFEEF3F7" AlternationCount="2" Background="Beige" ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              Margin="10,174,0,0">
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#0070F0"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Beige"/>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="grid_search_label_no" Header="No" Width="100" Binding="{Binding id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_search_label_place_no" Header="摆放No" Width="100" Binding="{Binding place_id}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_search_label_chinese_name" Header="品名" Width="100" Binding="{Binding chinese_name}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_search_label_korean_name" Header="品名(朝鲜语)" Width="100" Binding="{Binding korean_name}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_search_label_in_date" Header="入库日期" Width="100" Binding="{Binding in_date}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_search_label_place_date" Header="摆放日期" Width="100" Binding="{Binding date}"></DataGridTextColumn>
+                            <DataGridTextColumn x:Name="grid_search_label_place" Header="摆放工程" Width="80" Binding="{Binding place}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_place_old" Header="前工程" Width="80" Binding="{Binding old_place}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_place_new" Header="后工程" Width="80" Binding="{Binding new_place}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_model" Header="规格/型号" Width="100" Binding="{Binding model}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_count" Header="数量" Width="100" Binding="{Binding count}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_price" Header="单价" Width="100" Binding="{Binding price}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_owner" Header="归属厂" Width="100" Binding="{Binding owner}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_pay_state" Header="付款情况" Width="100" Binding="{Binding pay_state}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_remark" Header="备注" Width="100" Binding="{Binding remark}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_back_count" Header="返送数量" Width="100" Binding="{Binding back_count}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_back_date" Header="返送日期" Width="100" Binding="{Binding back_date}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_back_place" Header="返送工程" Width="80" Binding="{Binding back_place}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_exhaust_count" Header="处置数量" Width="100" Binding="{Binding exhaust_count}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_exhaust_date" Header="处置日期" Width="100" Binding="{Binding exhaust_date}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_exhaust_place" Header="处置工程" Width="80" Binding="{Binding exhaust_place}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_delete_history_date" Header="删除日期" Width="100" Binding="{Binding deleted_date}"/>
+                            <DataGridTextColumn x:Name="grid_search_label_delete_history_user" Header="用户" Width="100" Binding="{Binding deleted_user}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Name="tab4" Header="设定" FontSize="16" Width="150">
+                <Grid Background="Beige">
+                    <GroupBox HorizontalAlignment="Left" Height="227" Margin="36,35,0,0" VerticalAlignment="Top" Width="376" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_lang_setting" FontWeight="Bold">设定语言</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel HorizontalAlignment="Left" Height="182" Margin="21,6,0,0" VerticalAlignment="Top" Width="329">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton x:Name="label_chinese" GroupName="lang_setting" Margin="40 20 30 0" Content="汉语" Checked="chinese_Checked"/>
+                                <Image x:Name="check_chinese_png" Width="50" Height="60" Visibility="Visible">
+                                    <Image.Source>
+                                        <BitmapImage DecodePixelWidth="50" DecodePixelHeight="60" UriSource="/image/check_mark.png"/>
+                                    </Image.Source>
+                                </Image>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton x:Name="label_korean" GroupName="lang_setting" Margin="40 20 30 0" Content="朝鲜语" Checked="korean_Checked"/>
+                                <Image x:Name="check_korean_png" Width="50" Height="60" Visibility="Visible">
+                                    <Image.Source>
+                                        <BitmapImage DecodePixelWidth="50" DecodePixelHeight="60" UriSource="/image/check_mark.png"/>
+                                    </Image.Source>
+                                </Image>
+                            </StackPanel>
+                            <Button x:Name="btn_set_default_lang" Width="150" Height="30" Margin="0 10 0 0" Click="btn_set_default_lang_Click">设定为标准</Button>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="group_user_manage" HorizontalAlignment="Left" Height="251" Margin="498,35,0,0" VerticalAlignment="Top" Width="529" BorderBrush="#FF3C4347">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="label_user_setting" FontWeight="Bold">用户管理</TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="262" Margin="0,0,0,10">
+                                <ListView x:Name="username_list" Width="260" SelectionChanged="username_list_SelectionChanged"/>
+                            </StackPanel>
+                            <StackPanel Width="220" Margin="30 0 0 0">
+                                <Label Name="label_username_setting" Content="用户名"/>
+                                <TextBox x:Name="username_text_setting" Height="28" TextWrapping="Wrap" Text=""/>
+                                <Button x:Name="username_add_button" Content="添加" Margin="0 20 0 0" Click="username_add_button_Click"/>
+                                <Button x:Name="username_modify_button" Content="变更" Margin="0 20 0 0" Click="username_modify_button_Click"/>
+                                <Button x:Name="username_delete_button" Content="删除" Margin="0 20 0 0" Click="username_delete_button_Click"/>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="group_pass_manage" Header="密码管理" HorizontalAlignment="Left" Height="251" Margin="1111,35,0,0" VerticalAlignment="Top" Width="320" BorderBrush="#FF3C4347">
+                        <StackPanel>
+                            <StackPanel HorizontalAlignment="Left" Height="43" Margin="10,10,0,0" VerticalAlignment="Top" Width="286" Orientation="Horizontal">
+                                <Label x:Name="label_old_pass" Content="旧密码" Margin="0 5 0 0"/>
+                                <PasswordBox x:Name="old_pass" Width="210" Height="28" Margin="5,8,0,7"/>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left" Height="43" Margin="10,10,0,0" VerticalAlignment="Top" Width="286" Orientation="Horizontal">
+                                <Label x:Name="label_new_pass" Content="新密码" Margin="0 5 0 0"/>
+                                <PasswordBox x:Name="new_pass" Width="210" Height="28" Margin="5,8,0,7"/>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left" Height="43" Margin="10,10,0,0" VerticalAlignment="Top" Width="286" Orientation="Horizontal">
+                                <Label x:Name="label_retype_new_pass" Content="新密码"  Margin="0 5 0 0"/>
+                                <PasswordBox x:Name="retype_new_pass" Width="210" Height="28" Margin="5,8,0,7"/>
+                            </StackPanel>
+                            <Button x:Name="btn_pass_change" Content="变更" Margin="50 20 50 0" Click="btn_pass_change_Click"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

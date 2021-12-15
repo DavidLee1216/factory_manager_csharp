@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "hAJSN6wB4Pmw9NUsPdnybbw6X4I0bk6kWBAe4bZJyBeL7ULov097mfHYb7OPqXotqM/9B0FHnkkicvrUAY4U2g==",
+  "success": true,
+  "projectFilePath": "F:\\task\\factory\\factory_manager\\factory_manager\\factory_manager.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\David\\.nuget\\packages\\costura.fody\\4.1.0\\costura.fody.4.1.0.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\documentformat.openxml\\2.11.3\\documentformat.openxml.2.11.3.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\fody\\6.3.0\\fody.6.3.0.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\mysql.data\\6.9.12\\mysql.data.6.9.12.nupkg.sha512"
+  ],
+  "logs": []
+}
